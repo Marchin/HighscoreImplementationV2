@@ -3,6 +3,7 @@
 #include <nana/gui/widgets/button.hpp>
 #include <nana/gui/widgets/listbox.hpp>
 #include <nana/gui/widgets/textbox.hpp>
+#include <nana/gui/widgets/spinbox.hpp>
 #include <ScoreSystem.h>
 #include <string>
 #include <algorithm>
@@ -15,10 +16,6 @@ int main()
 	using namespace nana;
 	scoreSystem::ScoreSystem scoreTable(10);
 
-	for (int i = 0; i < 10; i++) {
-		scoreTable.AddScore("juan", 10);
-	}
-
 	//Define a form.
 	form fm;
 	fm.caption("Highscore");
@@ -29,19 +26,19 @@ int main()
 	lab.format(true);
 
 	textbox tb{ fm };
+	spinbox sb{ fm };
 
-	scoreTable.AddScore("pepe", 11);
 	listbox list{ fm,true };
 	list.append_header("Nombre");
 	list.append_header("Score");
 	DrawList(list, scoreTable);
 	button btnAdd{ fm, "Add" };
-	btnAdd.events().click([&fm, &scoreTable, &list, &tb] {
+	btnAdd.events().click([&fm, &scoreTable, &list, &tb, &sb] {
 		std::string name;
 		tb.getline(0, name);
 		name.erase(std::remove(name.begin(), name.end(), ' '), name.end());
 		if (name != "") {
-			scoreTable.AddScore(name.c_str(), 15);
+			scoreTable.AddScore(name.c_str(), std::stoi(sb.value()));
 		}
 		DrawList(list, scoreTable);
 	});
@@ -60,9 +57,10 @@ int main()
 	});
 
 	//Layout management
-	fm.div("vert <weight=80% listbox><<weight=20% text><tb><>><><weight=24<buttonA><buttonR><buttonQ>><>");
+	fm.div("vert <weight=80% listbox><<weight=20% text><tb><sb>><><weight=24<buttonQ><buttonR><buttonA>><>");
 	fm["text"] << lab;
 	fm["tb"] << tb;
+	fm["sb"] << sb;
 	fm["buttonA"] << btnAdd;
 	fm["buttonR"] << btnRemove;
 	fm["buttonQ"] << btnQuit;
