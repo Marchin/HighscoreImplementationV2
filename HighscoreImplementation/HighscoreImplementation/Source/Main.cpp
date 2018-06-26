@@ -9,6 +9,7 @@
 
 
 void DrawList(nana::listbox& list, scoreSystem::ScoreSystem& scoreTable);
+
 int main()
 {
 	using namespace nana;
