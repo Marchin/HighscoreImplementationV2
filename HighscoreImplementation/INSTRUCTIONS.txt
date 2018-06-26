@@ -1,0 +1,1 @@
+Go to Libraries/libs and unzip nana_v141_Release_x86
